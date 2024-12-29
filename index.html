@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Prescription Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            background: linear-gradient(to right, #ffffff, #f0f8ff);
+            color: #2c3e50;
+        }
+        .header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .clinic-info {
+            text-align: center;
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        .input-form {
+            background: #ecf0f1;
+            padding: 15px;
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .input-form input, .input-form button {
+            display: block;
+            width: 100%;
+            margin: 8px 0;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+        }
+        .input-form button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+        }
+        .input-form button:hover {
+            background-color: #2980b9;
+        }
+        .actions button {
+            margin: 5px;
+            padding: 10px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .print-btn {
+            background-color: #27ae60;
+        }
+        .print-btn:hover {
+            background-color: #1e8449;
+        }
+        .add-person-btn {
+            background-color: #f39c12;
+        }
+        .add-person-btn:hover {
+            background-color: #e67e22;
+        }
+        .whatsapp-btn {
+            background-color: #25d366;
+        }
+        .whatsapp-btn:hover {
+            background-color: #1ebd50;
+        }
+        .prescription-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .prescription-table, .prescription-table th, .prescription-table td {
+            border: 1px solid #34495e;
+            text-align: center;
+            padding: 8px;
+        }
+        @media screen and (max-width: 600px) {
+            .input-form, .prescription-table {
+                font-size: 14px;
+            }
+        }
+        @media print {
+            .input-form, .actions {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Shree Sai Clinic</div>
+    <div class="clinic-info">
+        <p>Dr. Amol C. Gomase, M.B.B.S. MD (Medicine)</p>
+        <p>Dr. Monali A. Gomase, B.A.M.S. (Amt. Govt.)</p>
+        <p>OPD Time: 10 AM - 6 PM</p>
+    </div>
+
+    <div class="input-form" id="inputForm">
+        <label for="patientName">Patient Name:</label>
+        <input type="text" id="patientName" placeholder="Enter patient name">
+        <label for="patientAge">Age:</label>
+        <input type="number" id="patientAge" placeholder="Enter patient age">
+        <label for="patientContact">Contact Number:</label>
+        <input type="tel" id="patientContact" placeholder="Enter contact number">
+        <label for="medicineName">Medicine Name:</label>
+        <input type="text" id="medicineName" placeholder="Enter medicine name">
+        <label for="dosage">Dosage:</label>
+        <input type="text" id="dosage" placeholder="e.g., 1-0-1">
+        <label for="timing">Timing:</label>
+        <input type="text" id="timing" placeholder="e.g., Before meals">
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" placeholder="e.g., 6">
+        <button onclick="addMedicine()">Add Medicine</button>
+    </div>
+
+    <div>
+        <strong>Patient Name:</strong> <span id="displayPatientName">N/A</span><br>
+        <strong>Age:</strong> <span id="displayPatientAge">N/A</span><br>
+        <strong>Contact:</strong> <span id="displayPatientContact">N/A</span><br>
+        <strong>Date:</strong> <span id="currentDate"></span>
+    </div>
+
+    <table class="prescription-table" id="medicineTable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Medicine</th>
+                <th>Dosage</th>
+                <th>Timing</th>
+                <th>Qty</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <div class="actions">
+        <button class="print-btn" onclick="showPrescription()">Print</button>
+        <button class="add-person-btn" onclick="addNewPerson()">Add Another Person</button>
+        <button class="whatsapp-btn" onclick="sendToWhatsApp()">Send to WhatsApp</button>
+    </div>
+
+    <script>
+        document.getElementById("currentDate").textContent = new Date().toLocaleDateString();
+
+        function addMedicine() {
+            const patientName = document.getElementById("patientName").value;
+            const patientAge = document.getElementById("patientAge").value;
+            const patientContact = document.getElementById("patientContact").value;
+            const medicineName = document.getElementById("medicineName").value;
+            const dosage = document.getElementById("dosage").value;
+            const timing = document.getElementById("timing").value;
+            const quantity = document.getElementById("quantity").value;
+
+            if (!patientName || !patientAge || !patientContact || !medicineName || !dosage || !timing || !quantity) {
+                alert("Please fill in all fields!");
+                return;
+            }
+
+            document.getElementById("displayPatientName").textContent = patientName;
+            document.getElementById("displayPatientAge").textContent = patientAge;
+            document.getElementById("displayPatientContact").textContent = patientContact;
+
+            const table = document.getElementById("medicineTable").querySelector("tbody");
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${table.rows.length}</td>
+                <td>${medicineName}</td>
+                <td>${dosage}</td>
+                <td>${timing}</td>
+                <td>${quantity}</td>
+            `;
+        }
+
+        function addNewPerson() {
+            document.querySelectorAll(".input-form input").forEach(input => input.value = "");
+            document.getElementById("displayPatientName").textContent = "N/A";
+            document.getElementById("displayPatientAge").textContent = "N/A";
+            document.getElementById("displayPatientContact").textContent = "N/A";
+            document.getElementById("medicineTable").querySelector("tbody").innerHTML = "";
+        }
+
+        function showPrescription() {
+            window.print();
+        }
+
+        function sendToWhatsApp() {
+            const patientName = document.getElementById("displayPatientName").textContent;
+            const patientAge = document.getElementById("displayPatientAge").textContent;
+            const patientContact = document.getElementById("displayPatientContact").textContent;
+            const rows = document.querySelectorAll("#medicineTable tbody tr");
+
+            if (!patientContact || patientContact === "N/A") {
+                alert("Please provide the patient's contact number!");
+                return;
+            }
+
+            let message = `Prescription for ${patientName}, Age: ${patientAge}\n\nMedicines:\n`;
+            rows.forEach(row => {
+                const cells = row.children;
+                message += `${cells[0].textContent}. ${cells[1].textContent} - ${cells[2].textContent}, ${cells[3].textContent}, Qty: ${cells[4].textContent}\n`;
+            });
+
+            const whatsappUrl = `https://wa.me/${patientContact}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, "_blank");
+        }
+    </script>
+</body>
+</html>
